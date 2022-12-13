@@ -26,7 +26,7 @@
     <ClCompile Include="2. WithoutDummyNode.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="4. ImpStackMethod.c" />
+    <ClCompile Include="4. ImplementStack.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

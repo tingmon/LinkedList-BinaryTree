@@ -167,6 +167,17 @@ void Pop() {
 	free(pTemp);
 }
 
+int PopWithNode(NODE* node) {
+	NODE* sp = g_pHead.next;
+	if (IsEmpty())
+		return 0;
+	memcpy(node, sp, sizeof(NODE));
+
+	g_pHead.next = sp->next;
+	free(sp);
+	return 1;
+}
+
 void PopUntilFindData(char* pData) {
 	NODE* pTemp = g_pHead.next;
 	NODE* pPrev = &g_pHead;
@@ -187,7 +198,15 @@ NODE* PopAndReturnNode() {
 	if (IsEmpty()) {
 		return 0;
 	}
-
+	NODE* pPopNode = (NODE*)malloc(sizeof(NODE));
+	memset(pPopNode, 0, sizeof(NODE));
+	strcpy_s(pPopNode->data, sizeof(pPopNode->data) , sp->data);
+	pPopNode->next = sp->next;
+	//memcpy(pPopNode, sp, sizeof(NODE));
+	
+	g_pHead.next = sp->next;
+	free(sp);
+	return pPopNode;
 }
 
 
@@ -198,12 +217,27 @@ int main()
 	Push("3");
 	Push("4");
 	Push("5");
+	Push("6");
+	Push("7");
+	Push("8");
+	Push("9");
+	Push("10");
 	PrintList();
 
-	PopUntilFindData("3");
+	NODE node = { 0 };
+
+	NODE* result = PopAndReturnNode();
+	if (result) {
+		printf("Node found [%p] data: %s, next: %p\n", result, result->data, result->next); // address cannot be same, this is a new node
+	}
+	PrintList();
+
+	PopUntilFindData("6");
 	PrintList();
 
 	Pop();
+	Pop();
+	PopWithNode(&node);
 	PrintList();
 
 	DropList();

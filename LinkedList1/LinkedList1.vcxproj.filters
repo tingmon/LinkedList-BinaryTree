@@ -24,7 +24,7 @@
     <ClCompile Include="2. WithoutDummyNode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="4. ImpStackMethod.c">
+    <ClCompile Include="4. ImplementStack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
