@@ -27,5 +27,8 @@
     <ClCompile Include="4. ImplementStack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="5. ImplementQueue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
