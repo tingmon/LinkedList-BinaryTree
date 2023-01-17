@@ -13,30 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\SingleLinkedList">
-      <UniqueIdentifier>{a7c9261c-1f3a-4d0f-9cc6-5152a8896e16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\DoubleLinkedList">
-      <UniqueIdentifier>{ce81f8e8-1898-414c-992f-f502fbdc943f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3. WithDummyNode.c">
+    <ClCompile Include="1-3. WithDummyNode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="1. Basic.c">
+    <ClCompile Include="1-1. Basic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="2. WithoutDummyNode.c">
+    <ClCompile Include="1-2. WithoutDummyNode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="4. ImplementStack.c">
+    <ClCompile Include="1-4. ImplementStack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="5. ImplementQueue.c">
+    <ClCompile Include="1-5. ImplementQueue.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="6. ImplementTailPointer.c">
+    <ClCompile Include="1-6. ImplementTailPointer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="2-1 Basic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
