@@ -4,7 +4,7 @@
 
 typedef struct NODE
 {
-	char* pData;
+	char pData[64];
 	struct NODE* prev;
 	struct NODE* next;
 } NODE;
@@ -24,6 +24,9 @@ void InitList()
 	memset(g_pHead, 0, sizeof(NODE));
 	memset(g_pTail, 0, sizeof(NODE));
 
+	strcpy_s(g_pHead->pData, sizeof(g_pHead->pData), "Dummy Head");
+	strcpy_s(g_pTail->pData, sizeof(g_pTail->pData), "Dummy Tail");
+
 	g_pHead->next = g_pTail;
 	g_pTail->prev = g_pHead;
 }
@@ -37,6 +40,11 @@ void DropList()
 		pTemp = pTemp->next;
 		free(pDelNode);
 	}
+
+	g_pHead = NULL;
+	g_pHead = NULL;
+	g_nSize = 0;
+	// InitList();
 }
 
 void PrintList()
@@ -44,7 +52,7 @@ void PrintList()
 	int counter = 0;
 	NODE* pTemp = g_pHead;
 	while (pTemp != NULL) {
-		printf("prev: [%p] | data: %s | next: [%p]\n", pTemp->prev, pTemp->pData, pTemp->next);
+		printf("prev: [%p], address: [%p], next: [%p], data: %s\n", pTemp->prev, pTemp, pTemp->next, pTemp->pData);
 		pTemp = pTemp->next;
 		counter++;
 	}
@@ -66,21 +74,57 @@ int IsEmpty()
 	return 0;
 }
 
+NODE* GetNodeByIndex(const int index)
+{
+	int length = GetLength();
+	int counter = 0;
+	if (index > length || index < 0)
+		return NULL;
+	if (length - index > length / 2)
+	{
+		NODE* pTemp = g_pHead->next;
+		while (pTemp != NULL)
+		{
+			if (counter == index)
+			{
+				return pTemp;
+			}
+			pTemp = pTemp->next;
+			counter++;
+		}
+	}
+	else
+	{
+		if (length - index == 0)
+		{
+			return g_pTail;
+		}
+		NODE* pTemp = g_pTail->prev;
+		while (pTemp != NULL)
+		{
+			if (counter == length - index - 1)
+			{
+				return pTemp;
+			}
+			pTemp = pTemp->prev;
+			counter++;
+		}
+	}
+	return NULL;
+}
+
+NODE* GetNodeByData(const char* data)
+{
+	return NULL;
+}
+
 int InsertHead(const char* data)
 {
 	// allocation, initialization, substitution
 	NODE* pNewNode = malloc(sizeof(NODE));
 	memset(pNewNode, 0, sizeof(NODE));
-	strcpy_s(pNewNode->pData, sizeof(NODE), data);
-	//if (g_nSize == 0) 
-	//{
-	//	g_pTail->prev = pNewNode;
-	//}
-	//else 
-	//{
-	//	NODE* pTemp = g_pHead->next;
-	//	pTemp->prev = pNewNode;
-	//}
+	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
+
 	pNewNode->prev = g_pHead;
 	pNewNode->next = g_pHead->next;
 	g_pHead->next = pNewNode;
@@ -96,16 +140,8 @@ int InsertTail(const char* data)
 	// allocation, initialization, substitution
 	NODE* pNewNode = malloc(sizeof(NODE));
 	memset(pNewNode, 0, sizeof(NODE));
-	strcpy_s(pNewNode->pData, sizeof(NODE), data);
-	//if (g_nSize == 0)
-	//{
-	//	g_pHead->next = pNewNode;
-	//}
-	//else
-	//{
-	//	NODE* pTemp = g_pTail->prev;
-	//	pTemp->next = pNewNode;
-	//}
+	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
+
 	pNewNode->prev = g_pTail->prev;
 	pNewNode->next = g_pTail;
 	g_pTail->prev = pNewNode;
@@ -118,15 +154,23 @@ int InsertTail(const char* data)
 
 int InsertMiddle(const int index, const char* data)
 {
-	if (GetLength() == 0 || index > GetLength() || index < 0)
+	if (index > GetLength() || index < 0)
 		return 0;
 	// allocation, initialization, substitution
 	NODE* pNewNode = malloc(sizeof(NODE));
 	memset(pNewNode, 0, sizeof(NODE));
-	strcpy_s(pNewNode->pData, sizeof(NODE), data);
+	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
 
-	NODE* front = GetNode(index - 1);
-	NODE* rear = GetNode(index);
+	NODE* front = GetNodeByIndex(index - 1);
+	NODE* rear = GetNodeByIndex(index);
+
+	if (index == 0) {
+		front = g_pHead;
+		if (IsEmpty())
+			rear = g_pTail;
+		else
+			rear = GetNodeByIndex(index);
+	}
 
 	pNewNode->prev = front;
 	pNewNode->next = rear;
@@ -138,83 +182,38 @@ int InsertMiddle(const int index, const char* data)
 	return g_nSize;
 }
 
-NODE* GetNode(const int index)
-{
-	int length = GetLength();
-	int counter = 0;
-	if (index > length || index < 0)
-		return NULL;
-	if (length - index > length / 2)
-	{
-		if (index == 0)
-		{
-			return g_pHead;
-		}
-
-		NODE* pTemp = g_pHead->next;
-		while (pTemp != NULL)
-		{
-			if (counter == index)
-			{
-				return pTemp;
-			}
-			pTemp = pTemp->next;
-			counter++;
-		}
-	}
-	else 
-	{
-		if (length - index == 0)
-		{
-			return g_pTail;
-		}
-		NODE* pTemp = g_pTail->prev;
-		while (pTemp != NULL)
-		{
-			if (counter == length - index)
-			{
-				return pTemp;
-			}
-			pTemp = pTemp->prev;
-			counter++;
-		}
-	}
-	return NULL;
-}
-
-NODE* GetNode(const char* data)
-{
-	return NULL;
-}
-
 int DeleteNode(const char* data)
 {
-	NODE* pDelNode = GetNode(data);
+	NODE* pDelNode = GetNodeByData(data);
 	return 0;
 }
 
-int main(void) 
+int main() 
 {
 	InitList();
+
+	InsertMiddle(0, "TestMiddle1");
 
 	InsertHead("TestHead1");
 	InsertHead("TestHead2");
 	InsertHead("TestHead3");
 
 	PrintList();
+	printf("\n");
 
 	InsertTail("TestTail1");
 	InsertTail("TestTail2");
 	InsertTail("TestTail3");
 
 	PrintList();
+	printf("\n");
 
-	InsertMiddle(3, "TestMiddle1");
-	InsertMiddle(7, "TestMiddle2");
+	InsertMiddle(0, "TestMiddle2");
+	InsertMiddle(8, "TestMiddle3");
 
 	PrintList();
+	printf("\n");
 
 	DropList();
-	PrintList();
 	return 0;
 }
