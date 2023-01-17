@@ -33,7 +33,7 @@
     <ClCompile Include="1-6. ImplementTailPointer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="2-1 Basic.c">
+    <ClCompile Include="2-1 DoubleLinkedList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

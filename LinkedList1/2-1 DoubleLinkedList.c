@@ -74,6 +74,16 @@ int IsEmpty()
 	return 0;
 }
 
+NODE* NodeInit(const char* data)
+{
+	// allocation, initialization, substitution
+	NODE* pNewNode = malloc(sizeof(NODE));
+	memset(pNewNode, 0, sizeof(NODE));
+	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
+	
+	return pNewNode;
+}
+
 NODE* GetNodeByIndex(const int index)
 {
 	int length = GetLength();
@@ -129,35 +139,43 @@ NODE* GetNodeByData(const char* data)
 
 int InsertHead(const char* data)
 {
-	// allocation, initialization, substitution
-	NODE* pNewNode = malloc(sizeof(NODE));
-	memset(pNewNode, 0, sizeof(NODE));
-	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
+	NODE* pNewNode = NodeInit(data);
 
+	InsertAfter(g_pHead, pNewNode);
+
+	return g_nSize;
+}
+
+int InsertAfter(NODE* pDstNode, NODE* pNewNode)
+{
+	NODE* pNext = pDstNode->next;
 	pNewNode->prev = g_pHead;
 	pNewNode->next = g_pHead->next;
 	g_pHead->next = pNewNode;
-	pNewNode->next->prev = pNewNode;
+	pNext->prev = pNewNode;
 
 	g_nSize++;
-
 	return g_nSize;
 }
 
 int InsertTail(const char* data)
 {
-	// allocation, initialization, substitution
-	NODE* pNewNode = malloc(sizeof(NODE));
-	memset(pNewNode, 0, sizeof(NODE));
-	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
+	NODE* pNewNode = NodeInit(data);
 
-	pNewNode->prev = g_pTail->prev;
-	pNewNode->next = g_pTail;
-	g_pTail->prev = pNewNode;
-	pNewNode->prev->next = pNewNode;
+	InsertBefore(g_pTail, pNewNode);
+
+	return g_nSize;
+}
+
+int InsertBefore(NODE* pDstNode, NODE* pNewNode) 
+{
+	NODE* pPrev = pDstNode->prev;
+	pNewNode->prev = pDstNode->prev;
+	pNewNode->next = pDstNode;
+	pDstNode->prev = pNewNode;
+	pPrev->next = pNewNode;
 
 	g_nSize++;
-
 	return g_nSize;
 }
 
@@ -165,28 +183,10 @@ int InsertMiddle(const int index, const char* data)
 {
 	if (index > GetLength() || index < 0)
 		return 0;
-	// allocation, initialization, substitution
-	NODE* pNewNode = malloc(sizeof(NODE));
-	memset(pNewNode, 0, sizeof(NODE));
-	strcpy_s(pNewNode->pData, sizeof(pNewNode->pData), data);
+	NODE* pNewNode = NodeInit(data);
+	NODE* target = GetNodeByIndex(index);
 
-	NODE* front = GetNodeByIndex(index - 1);
-	NODE* rear = GetNodeByIndex(index);
-
-	if (index == 0) {
-		front = g_pHead;
-		if (IsEmpty())
-			rear = g_pTail;
-		else
-			rear = GetNodeByIndex(index);
-	}
-
-	pNewNode->prev = front;
-	pNewNode->next = rear;
-	front->next = pNewNode;
-	rear->prev = pNewNode;
-
-	g_nSize++;
+	InsertBefore(target, pNewNode);
 
 	return g_nSize;
 }
@@ -242,7 +242,7 @@ int main()
 	printf("\n");
 
 	DeleteNodeByData("TestTail2");
-	DeleteNodeByIndex(8);
+	DeleteNodeByIndex(6);
 
 	PrintList();
 	printf("\n");
