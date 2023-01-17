@@ -115,6 +115,15 @@ NODE* GetNodeByIndex(const int index)
 
 NODE* GetNodeByData(const char* data)
 {
+	NODE* pTemp = g_pHead->next;
+	while (pTemp != NULL)
+	{
+		if (strcmp(pTemp->pData, data) == 0)
+		{
+			return pTemp;
+		}
+		pTemp = pTemp->next;
+	}
 	return NULL;
 }
 
@@ -182,9 +191,27 @@ int InsertMiddle(const int index, const char* data)
 	return g_nSize;
 }
 
-int DeleteNode(const char* data)
+int DeleteNodeByData(const char* data)
 {
 	NODE* pDelNode = GetNodeByData(data);
+	if (pDelNode == NULL)
+		return 0;
+	pDelNode->prev->next = pDelNode->next;
+	pDelNode->next->prev = pDelNode->prev;
+	free(pDelNode);
+	g_nSize--;
+	return 0;
+}
+
+int DeleteNodeByIndex(const int index)
+{
+	if (IsEmpty() || GetLength() == 0 || index < 0 || index >= GetLength())
+		return 0;
+	NODE* pDelNode = GetNodeByIndex(index);
+	pDelNode->prev->next = pDelNode->next;
+	pDelNode->next->prev = pDelNode->prev;
+	free(pDelNode);
+	g_nSize--;
 	return 0;
 }
 
@@ -210,6 +237,12 @@ int main()
 
 	InsertMiddle(0, "TestMiddle2");
 	InsertMiddle(8, "TestMiddle3");
+
+	PrintList();
+	printf("\n");
+
+	DeleteNodeByData("TestTail2");
+	DeleteNodeByIndex(8);
 
 	PrintList();
 	printf("\n");
