@@ -29,7 +29,8 @@
     <ClCompile Include="1-4. ImplementStack.c" />
     <ClCompile Include="1-5. ImplementQueue.c" />
     <ClCompile Include="1-6. ImplementTailPointer.c" />
-    <ClCompile Include="2-1 DoubleLinkedList.c" />
+    <ClCompile Include="2-1. DoubleLinkedList.c" />
+    <ClCompile Include="2-2. ADT.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
