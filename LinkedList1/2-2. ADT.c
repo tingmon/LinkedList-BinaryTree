@@ -2,9 +2,27 @@
 #include <string.h>
 #include <malloc.h>
 
-// characteristics
-typedef struct USERDATA
+int InsertHead(const void* data);
+int InsertTail(const void* data);
+int InsertMiddle(const int index, const void* data);
+
+// NODE must be detached from data characteristics and operations.(Reusability)
+typedef struct NODE
 {
+	// Manageable Data
+	void* pData;
+
+	// Data Structure
+	struct NODE* prev;
+	struct NODE* next;
+} NODE;
+
+// characteristics
+typedef struct USERDATA // how to remove USERDATA* declaration in code?
+{	
+	// Member Function Pointer
+	const char* (*GetKey)(void*);
+
 	char name[64]; // key
 	char phone[64];
 } USERDATA;
@@ -15,23 +33,18 @@ const char* GetKeyFromUserData(USERDATA* pUser)
 	return pUser->name;
 }
 
-void CreateUserData(const char* name, const char* phone)
+USERDATA* ConstructUserData(const char* name, const char* phone)
 {
+	USERDATA* pNewData = (USERDATA*)malloc(sizeof(USERDATA));
+	memset(pNewData, 0, sizeof(USERDATA));
+	strcpy_s(pNewData->name, sizeof(pNewData->name), name);
+	strcpy_s(pNewData->phone, sizeof(pNewData->phone), phone);
 
+	// structure member function initializing
+	pNewData->GetKey = GetKeyFromUserData;
+
+	return pNewData;
 }
-
-typedef struct NODE
-{
-	// Manageable Data
-	void* pData;
-
-	// Member Function Pointer
-	const char* (*GetKey)(void*);
-
-	// Data Structure
-	struct NODE* prev;
-	struct NODE* next;
-} NODE;
 
 NODE* g_pHead; // Head dummy node
 NODE* g_pTail; // Tail dummy node
@@ -78,7 +91,8 @@ void PrintList()
 			printf("prev: [%p], address: [%p], next: [%p], DUMMY\n", pTemp->prev, pTemp, pTemp->next);
 		}
 		else {
-			printf("prev: [%p], address: [%p], next: [%p], name(key): %s\n", pTemp->prev, pTemp, pTemp->next, pTemp->GetKey(pTemp->pData));
+			USERDATA* pUser = pTemp->pData; // not a good code for the sake of reusability
+			printf("prev: [%p], address: [%p], next: [%p], name(key): %s\n", pTemp->prev, pTemp, pTemp->next, pUser->GetKey(pUser));
 		}
 		pTemp = pTemp->next;
 		counter++;
@@ -102,13 +116,16 @@ int IsEmpty()
 	return 0;
 }
 
-NODE* NodeInit(const void* data, const char* (*pfParam)(void*))
+NODE* NodeInit(const void* data)
 {
 	// allocation, initialization, substitution
 	NODE* pNewNode = malloc(sizeof(NODE));
 	memset(pNewNode, 0, sizeof(NODE));
 	pNewNode->pData = (USERDATA*)data;
-	pNewNode->GetKey = pfParam;
+
+	// structure member function initializing
+	USERDATA* pUser = pNewNode->pData;
+	pUser->GetKey = GetKeyFromUserData;
 
 	return pNewNode;
 }
@@ -157,7 +174,8 @@ NODE* GetNodeByKey(const char* key)
 	NODE* pTemp = g_pHead->next;
 	while (pTemp != NULL)
 	{
-		if (strcmp(pTemp->GetKey(pTemp->pData), key) == 0)
+		USERDATA* pfGetKey = pTemp->pData; // assuming first member of pData is GetKey function
+		if (strcmp(pfGetKey->GetKey(pTemp->pData), key) == 0)
 		{
 			return pTemp;
 		}
@@ -192,29 +210,29 @@ int InsertBefore(NODE* pDstNode, NODE* pNewNode)
 	return g_nSize;
 }
 
-int InsertHead(const void* data, const char* (*pfParam)(void*))
+int InsertHead(const void* data)
 {
-	NODE* pNewNode = NodeInit(data, pfParam);
+	NODE* pNewNode = NodeInit(data);
 
 	InsertAfter(g_pHead, pNewNode);
 
 	return g_nSize;
 }
 
-int InsertTail(const void* data, const char* (*pfParam)(void*))
+int InsertTail(const void* data)
 {
-	NODE* pNewNode = NodeInit(data, pfParam);
+	NODE* pNewNode = NodeInit(data);
 
 	InsertBefore(g_pTail, pNewNode);
 
 	return g_nSize;
 }
 
-int InsertMiddle(const int index, const void* data, const char* (*pfParam)(void*))
+int InsertMiddle(const int index, const void* data)
 {
 	if (index > GetLength() || index < 0)
 		return 0;
-	NODE* pNewNode = NodeInit(data, pfParam);
+	NODE* pNewNode = NodeInit(data);
 	NODE* target = GetNodeByIndex(index);
 
 	InsertBefore(target, pNewNode);
@@ -256,33 +274,35 @@ int main()
 {
 	InitList();
 
-	USERDATA* pNewData = (USERDATA*)malloc(sizeof(USERDATA));
+	USERDATA* pNewData = NULL;
+	pNewData = ConstructUserData("oihn", "125125");
+	InsertTail(pNewData);
+
+	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
 	memset(pNewData, 0, sizeof(USERDATA));
 	strcpy_s(pNewData->name, sizeof(pNewData->name), "tj");
 	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
-
-	InsertTail(pNewData, GetKeyFromUserData);
+	InsertTail(pNewData);
 
 	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
 	memset(pNewData, 0, sizeof(USERDATA));
 	strcpy_s(pNewData->name, sizeof(pNewData->name), "asdf");
 	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
-
-	InsertTail(pNewData, GetKeyFromUserData);
+	InsertTail(pNewData);
 
 	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
 	memset(pNewData, 0, sizeof(USERDATA));
 	strcpy_s(pNewData->name, sizeof(pNewData->name), "qwer");
 	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
-
-	InsertHead(pNewData, GetKeyFromUserData);
+	InsertHead(pNewData);
 
 	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
 	memset(pNewData, 0, sizeof(USERDATA));
 	strcpy_s(pNewData->name, sizeof(pNewData->name), "zxcv");
 	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
+	InsertMiddle(2, pNewData);
 
-	InsertMiddle(2, pNewData, GetKeyFromUserData);
+	PrintList();
 
 	DeleteNodeByIndex(2);
 	DeleteNodeByKey("qwer");

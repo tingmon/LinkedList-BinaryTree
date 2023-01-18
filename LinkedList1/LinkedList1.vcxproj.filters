@@ -39,5 +39,16 @@
     <ClCompile Include="2-2. ADT.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="2-3 myListFucntions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="2-4 myListUserCode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="myList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
