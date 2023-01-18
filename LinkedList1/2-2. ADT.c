@@ -2,15 +2,22 @@
 #include <string.h>
 #include <malloc.h>
 
+// characteristics
 typedef struct USERDATA
 {
 	char name[64]; // key
 	char phone[64];
 } USERDATA;
 
+// operation
 const char* GetKeyFromUserData(USERDATA* pUser)
 {
 	return pUser->name;
+}
+
+void CreateUserData(const char* name, const char* phone)
+{
+
 }
 
 typedef struct NODE
@@ -159,6 +166,7 @@ NODE* GetNodeByKey(const char* key)
 	return NULL;
 }
 
+// setting node connection for InsertHead
 int InsertAfter(NODE* pDstNode, NODE* pNewNode)
 {
 	NODE* pNext = pDstNode->next;
@@ -171,6 +179,7 @@ int InsertAfter(NODE* pDstNode, NODE* pNewNode)
 	return g_nSize;
 }
 
+// setting node connection for InsertTail
 int InsertBefore(NODE* pDstNode, NODE* pNewNode)
 {
 	NODE* pPrev = pDstNode->prev;
@@ -253,6 +262,30 @@ int main()
 	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
 
 	InsertTail(pNewData, GetKeyFromUserData);
+
+	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
+	memset(pNewData, 0, sizeof(USERDATA));
+	strcpy_s(pNewData->name, sizeof(pNewData->name), "asdf");
+	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
+
+	InsertTail(pNewData, GetKeyFromUserData);
+
+	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
+	memset(pNewData, 0, sizeof(USERDATA));
+	strcpy_s(pNewData->name, sizeof(pNewData->name), "qwer");
+	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
+
+	InsertHead(pNewData, GetKeyFromUserData);
+
+	pNewData = (USERDATA*)malloc(sizeof(USERDATA));
+	memset(pNewData, 0, sizeof(USERDATA));
+	strcpy_s(pNewData->name, sizeof(pNewData->name), "zxcv");
+	strcpy_s(pNewData->phone, sizeof(pNewData->phone), "1234");
+
+	InsertMiddle(2, pNewData, GetKeyFromUserData);
+
+	DeleteNodeByIndex(2);
+	DeleteNodeByKey("qwer");
 
 
 	PrintList();
