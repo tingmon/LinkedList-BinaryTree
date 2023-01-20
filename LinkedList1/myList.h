@@ -1,4 +1,5 @@
 #pragma once
+// Uncomment codes inside 2-3 and 2-4 files for testing.
 
 typedef struct NODE
 {
