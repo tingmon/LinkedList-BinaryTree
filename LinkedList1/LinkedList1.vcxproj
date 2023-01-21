@@ -31,9 +31,9 @@
     <ClCompile Include="1-6. ImplementTailPointer.c" />
     <ClCompile Include="2-1. DoubleLinkedList.c" />
     <ClCompile Include="2-2. ADT.c" />
-    <ClCompile Include="2-3 myListFucntions.c" />
-    <ClCompile Include="2-4 myListUserCode.c" />
-    <ClCompile Include="BinaryTree.c" />
+    <ClCompile Include="2-3. myListFucntions.c" />
+    <ClCompile Include="2-4. myListUserCode.c" />
+    <ClCompile Include="3-1. BinaryTree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="myList.h" />

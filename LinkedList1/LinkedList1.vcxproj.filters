@@ -39,13 +39,13 @@
     <ClCompile Include="2-2. ADT.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="2-3 myListFucntions.c">
+    <ClCompile Include="2-3. myListFucntions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="2-4 myListUserCode.c">
+    <ClCompile Include="2-4. myListUserCode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BinaryTree.c">
+    <ClCompile Include="3-1. BinaryTree.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
